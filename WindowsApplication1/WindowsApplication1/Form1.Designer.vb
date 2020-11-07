@@ -60,6 +60,7 @@ Partial Class main_form
         Me.export_tb = New System.Windows.Forms.TextBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.refresh_btn = New System.Windows.Forms.Button()
         CType(Me.cpk_chart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -351,11 +352,22 @@ Partial Class main_form
         Me.Label13.Text = "Export To"
         Me.Label13.Visible = False
         '
+        'refresh_btn
+        '
+        Me.refresh_btn.Enabled = False
+        Me.refresh_btn.Location = New System.Drawing.Point(735, 159)
+        Me.refresh_btn.Name = "refresh_btn"
+        Me.refresh_btn.Size = New System.Drawing.Size(100, 23)
+        Me.refresh_btn.TabIndex = 32
+        Me.refresh_btn.Text = "Refresh"
+        Me.refresh_btn.UseVisualStyleBackColor = True
+        '
         'main_form
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(981, 551)
+        Me.Controls.Add(Me.refresh_btn)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.export_tb)
         Me.Controls.Add(Me.Label13)
@@ -429,5 +441,6 @@ Partial Class main_form
     Friend WithEvents export_tb As System.Windows.Forms.TextBox
     Friend WithEvents Label13 As System.Windows.Forms.Label
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents refresh_btn As System.Windows.Forms.Button
 
 End Class

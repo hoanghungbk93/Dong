@@ -140,6 +140,7 @@ Public Class main_form
         End If
         calculate()
         cpk_tm.Enabled = True
+        refresh_btn.Enabled = True
     End Sub
 
     Private Sub cpk_tm_Tick(sender As Object, e As EventArgs) Handles cpk_tm.Tick
@@ -181,5 +182,9 @@ Public Class main_form
             exportFolder = FolderBrowserDialog1.SelectedPath
             step_cbb.Enabled = True
         End If
+    End Sub
+
+    Private Sub refresh_btn_Click(sender As Object, e As EventArgs) Handles refresh_btn.Click
+        calculate()
     End Sub
 End Class
