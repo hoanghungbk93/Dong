@@ -135,7 +135,7 @@ Public Class main_form
                 ElseIf counter = 6 Then
                     lower_tb.Text = values(selectedColumn)
                     lowerLm = values(selectedColumn)
-                ElseIf counter >= 9 And values.Length >= selectedColumn Then
+                ElseIf counter >= 8 And values.Length >= selectedColumn Then
                     Dim value As Single
                     Dim isNumerical As Boolean = Single.TryParse(values(selectedColumn), value)
                     If isNumerical = True And value <= upperLm And value >= lowerLm Then
