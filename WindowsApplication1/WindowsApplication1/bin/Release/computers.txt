@@ -1,1 +1,2 @@
-192.168.88.68
+\\192.168.88.68\share
+C:\Users\hunghc\Desktop\MVC5\Dong

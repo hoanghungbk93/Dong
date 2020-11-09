@@ -11,15 +11,16 @@ Public Class main_form
     Private exportFolder As String
     Private computerName As String
     Public fileList() As String
+    Public units() As String
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Console.WriteLine("Form Load Event")
-        Dim modelPath As String = "C:\Users\hunghc\Desktop\MVC5\Dong\models.txt"
+        Dim unitPath As String = "units.txt"
         Dim computerPath As String = "computers.txt"
-        ' Read modesl.
-        'If File.Exists(modelPath) = True Then
-        '    Dim readText() As String = File.ReadAllLines(modelPath)
-        '    models_cbb.Items.AddRange(readText)
-        'End If
+        ' Read units.
+        If File.Exists(unitPath) = True Then
+            units = File.ReadAllLines(unitPath)
+            Console.WriteLine(units(0))
+        End If
         ' Read computers.
         If File.Exists(computerPath) = True Then
             Dim readText() As String = File.ReadAllLines(computerPath)
@@ -32,26 +33,79 @@ Public Class main_form
         cpk_chart.ChartAreas(0).AxisX.ScaleView.SizeType = DateTimeIntervalType.Number
         cpk_chart.ChartAreas(0).AxisX.ScaleView.SmallScrollSize = 100
     End Sub
-
+    Private Function isUnit(unit As String)
+        Dim ret As Boolean = False
+        For Each _unit As String In units
+            If unit = _unit Then
+                ret = True
+                Exit For
+            End If
+        Next
+        Return ret
+    End Function
+    Private Sub getSteps()
+        Dim testFile As System.IO.FileInfo
+        testFile = My.Computer.FileSystem.GetFileInfo(strFileName)
+        Dim folderPath As String = testFile.DirectoryName
+        Dim fileName As String = testFile.Name
+        Dim fileNameCopy = folderPath + "\" + fileName.Split(".csv")(0) + "_copy.csv"
+        My.Computer.FileSystem.CopyFile(strFileName, fileNameCopy, overwrite:=True)
+        Try
+            Dim fileContents() As String = File.ReadAllLines(fileNameCopy)
+            If fileContents.Length > 8 Then
+                Dim steps() As String = fileContents(7).Split(",")
+                Dim _step As Integer = 0
+                For Each temp As String In steps
+                    If isUnit(temp) = True Then
+                        step_cbb.Items.Add(_step.ToString())
+                    End If
+                    _step = _step + 1
+                Next
+            End If
+        Catch e As IOException
+            MessageBox.Show("File not found")
+        End Try
+    End Sub
     Private Sub models_cbb_SelectedIndexChanged(sender As Object, e As EventArgs) Handles models_cbb.SelectedIndexChanged
         step_cbb.Enabled = True
+        step_cbb.Items.Clear()
+        step_cbb.Text = ""
         strFileName = models_cbb.Text
+        getSteps()
+        cpk_tm.Stop()
+        cpk_chart.Series(0).Points.Clear()
     End Sub
-
+    Private Sub resetValue()
+        avg_tb.Text = ""
+        min_tb.Text = ""
+        max_tb.Text = ""
+        upper_tb.Text = ""
+        lower_tb.Text = ""
+        cpk_tb.Text = ""
+        total_tb.Text = ""
+        ng_tb.Text = ""
+        ok_tb.Text = ""
+        refresh_btn.Enabled = False
+    End Sub
     Private Sub computers_cbb_SelectedIndexChanged(sender As Object, e As EventArgs) Handles computers_cbb.SelectedIndexChanged
         models_cbb.Enabled = True
         computerName = computers_cbb.Text
+        step_cbb.Items.Clear()
+        step_cbb.Enabled = False
+        step_cbb.Text = ""
+        models_cbb.Items.Clear()
+        models_cbb.Text = ""
+        cpk_tm.Stop()
+        cpk_chart.Series(0).Points.Clear()
         Try
-            'Dim f As FileStream = File.Open("\\192.168.88.68\share\hh.txt", FileMode.Open)
-            fileList = IO.Directory.GetFiles("\\" + computers_cbb.Text + "\share", "*.csv")
-            exportFolder = "\\" + computers_cbb.Text + "\share"
+            fileList = IO.Directory.GetFiles(computers_cbb.Text, "*.csv")
+            exportFolder = computers_cbb.Text
             models_cbb.Items.AddRange(fileList)
         Catch ex As IOException
             MessageBox.Show("file not found")
         End Try
     End Sub
     Private Sub calculate()
-        'Dim file_name As String = "C:\Users\hunghc\Desktop\MVC5\Dong\1.csv" '(where ssssssss is the PC or server name
         Dim okCount As Integer = 0
         Dim counter As Integer = 0
         Dim min As Single = 999999
@@ -61,8 +115,14 @@ Public Class main_form
         Dim avg As Single = 0
         Dim upperLm As Single = 0
         Dim lowerLm As Single = 0
+        Dim testFile As System.IO.FileInfo
+        testFile = My.Computer.FileSystem.GetFileInfo(strFileName)
+        Dim folderPath As String = testFile.DirectoryName
+        Dim fileName As String = testFile.Name
+        Dim fileNameCopy = folderPath + "\" + fileName.Split(".csv")(0) + "_copy.csv"
+        My.Computer.FileSystem.CopyFile(strFileName, fileNameCopy, overwrite:=True)
         Try
-            Dim quoteArray As String() = File.ReadAllLines(strFileName)
+            Dim quoteArray As String() = File.ReadAllLines(fileNameCopy)
             For Each line As String In quoteArray
                 Dim values() As String = line.Split(",")
                 If counter = 0 Then
@@ -75,7 +135,7 @@ Public Class main_form
                 ElseIf counter = 6 Then
                     lower_tb.Text = values(selectedColumn)
                     lowerLm = values(selectedColumn)
-                ElseIf counter >= 8 And values.Length >= selectedColumn Then
+                ElseIf counter >= 9 And values.Length >= selectedColumn Then
                     Dim value As Single
                     Dim isNumerical As Boolean = Single.TryParse(values(selectedColumn), value)
                     If isNumerical = True And value <= upperLm And value >= lowerLm Then
@@ -93,12 +153,6 @@ Public Class main_form
                 counter = counter + 1
             Next
             avg = sum / okCount
-            'Console.WriteLine("avg")
-            'Console.WriteLine(avg)
-            'Console.WriteLine("max")
-            'Console.WriteLine(max)
-            'Console.WriteLine("min")
-            'Console.WriteLine(min)
             avg_tb.Text = avg.ToString()
             min_tb.Text = min.ToString()
             max_tb.Text = max.ToString()
@@ -129,21 +183,14 @@ Public Class main_form
     End Sub
     Private Sub step_cbb_SelectedIndexChanged(sender As Object, e As EventArgs) Handles step_cbb.SelectedIndexChanged
         cpk_chart.Series(0).Points.Clear()
-        If step_cbb.SelectedIndex = 0 Then
-            selectedColumn = 11
-        ElseIf step_cbb.SelectedIndex = 1 Then
-            selectedColumn = 12
-        ElseIf step_cbb.SelectedIndex = 2 Then
-            selectedColumn = 14
-        ElseIf step_cbb.SelectedIndex = 3 Then
-            selectedColumn = 15
-        End If
+        selectedColumn = Integer.Parse(step_cbb.Text)
         calculate()
-        cpk_tm.Enabled = True
+        cpk_tm.Start()
         refresh_btn.Enabled = True
     End Sub
 
     Private Sub cpk_tm_Tick(sender As Object, e As EventArgs) Handles cpk_tm.Tick
+
         Console.WriteLine("hihi")
         calculate()
 

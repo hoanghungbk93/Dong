@@ -23,9 +23,9 @@ Partial Class main_form
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.min_tb = New System.Windows.Forms.TextBox()
         Me.models_cbb = New System.Windows.Forms.ComboBox()
@@ -208,7 +208,6 @@ Partial Class main_form
         '
         Me.step_cbb.Enabled = False
         Me.step_cbb.FormattingEnabled = True
-        Me.step_cbb.Items.AddRange(New Object() {"1", "2", "3", "4"})
         Me.step_cbb.Location = New System.Drawing.Point(735, 33)
         Me.step_cbb.Name = "step_cbb"
         Me.step_cbb.Size = New System.Drawing.Size(100, 21)
@@ -267,18 +266,18 @@ Partial Class main_form
         Me.cpk_chart.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        ChartArea3.CursorX.IsUserEnabled = True
-        ChartArea3.CursorX.IsUserSelectionEnabled = True
-        ChartArea3.Name = "ChartArea1"
-        Me.cpk_chart.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.cpk_chart.Legends.Add(Legend3)
+        ChartArea1.CursorX.IsUserEnabled = True
+        ChartArea1.CursorX.IsUserSelectionEnabled = True
+        ChartArea1.Name = "ChartArea1"
+        Me.cpk_chart.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.cpk_chart.Legends.Add(Legend1)
         Me.cpk_chart.Location = New System.Drawing.Point(21, 204)
         Me.cpk_chart.Name = "cpk_chart"
-        Series3.ChartArea = "ChartArea1"
-        Series3.Legend = "Legend1"
-        Series3.Name = "Series1"
-        Me.cpk_chart.Series.Add(Series3)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.cpk_chart.Series.Add(Series1)
         Me.cpk_chart.Size = New System.Drawing.Size(912, 326)
         Me.cpk_chart.TabIndex = 24
         Me.cpk_chart.Text = "Chart1"
